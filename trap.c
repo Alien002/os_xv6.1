@@ -77,7 +77,22 @@ trap(struct trapframe *tf)
             cpuid(), tf->cs, tf->eip);
     lapiceoi();
     break;
-
+  case T_PGFLT:
+          if(tf->esp >= rcr2() && rcr2() < KERNBASE){
+              uint currTop = KERNBASE - myproc()stackSZ * PGSIZE;
+              if(allocuvm(myproc() -> pgdir, PGROUNDDOWN(currTop - 1), currTop - 1) == 0){
+                  cprintf("PGFLT: ERROR, unable to allocate page. \n");
+                  exit();
+              }
+              
+              myproc()->stackSZ++;
+              cprintf("PGFLT: pagees currently allocated: \n", myproc()->stackSZ);
+          }
+          else{
+              cprintf("PGFLT: ERROR, address is out of bounds. \n");
+              exit();
+          }
+    break;
   //PAGEBREAK: 13
   default:
     if(myproc() == 0 || (tf->cs&3) == 0){
