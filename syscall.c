@@ -61,7 +61,7 @@ int
 argptr(int n, char **pp, int size)
 {
   int i;
-  struct proc *curproc = myproc();
+  //struct proc *curproc = myproc();
  
   if(argint(n, &i) < 0)
     return -1;
