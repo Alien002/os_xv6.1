@@ -338,7 +338,7 @@ copyuvm(pde_t *pgdir, uint sz, uint stack_sz)
     
     //start at page below kernal memory
     //end when all pages have been copied
-    for(i = PGROUNDUP(KERNBASE - 1 - myproc()->stackSZ * PGSIZE); i < KERNBASE; i += PGSIZE){
+    for(i = PGROUNDUP(KERNBASE - 1 - myproc()->stack_sz * PGSIZE); i < KERNBASE; i += PGSIZE){
         if((pte = walkpgdir(pgdir, (void *) i, 0)) == 0)
             panic("copyuvm: pte should exist");
         if(!(*pte & PTE_P))
