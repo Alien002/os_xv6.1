@@ -78,8 +78,8 @@ trap(struct trapframe *tf)
     lapiceoi();
     break;
   case T_PGFLT:
-          if(tf->esp >= rcr2() && rcr2() < KERNBASE){
-              uint currTop = KERNBASE - myproc()->stack_sz * PGSIZE;
+          if(tf->esp >= rcr2() && rcr2() < STACKTOP){
+              uint currTop = STACKTOP - myproc()->stack_sz * PGSIZE;
               if(allocuvm(myproc() -> pgdir, PGROUNDDOWN(currTop - 1), currTop - 1) == 0){
                   cprintf("PGFLT: ERROR, unable to allocate page. \n");
                   exit();
