@@ -113,6 +113,7 @@
 		400531182228836A00CF5F70 /* x86.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = x86.h; sourceTree = "<group>"; };
 		400531192228836A00CF5F70 /* xv6_1.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; path = xv6_1.xcodeproj; sourceTree = "<group>"; };
 		4005311C2228836A00CF5F70 /* zombie.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = zombie.c; sourceTree = "<group>"; };
+		409314632230987A00E1B3CD /* lab3.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = lab3.c; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -158,6 +159,7 @@
 				400530D02228836A00CF5F70 /* kbd.h */,
 				400530D12228836A00CF5F70 /* kernel.ld */,
 				400530D22228836A00CF5F70 /* kill.c */,
+				409314632230987A00E1B3CD /* lab3.c */,
 				400530D32228836A00CF5F70 /* lapic.c */,
 				400530D42228836A00CF5F70 /* LICENSE */,
 				400530D52228836A00CF5F70 /* ln.c */,
