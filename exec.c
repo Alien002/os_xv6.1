@@ -60,8 +60,8 @@ exec(char *path, char **argv)
   end_op();
   ip = 0;
 
-  // Allocate two pages at the next page boundary.
-  // Make the first inaccessible.  Use the second as the user stack.
+  // Allocate pages at the bottom of Stack below kernbase (KERNBASE -4).
+  // Stack grows down from the kernbase, allocated memory fills where sp is.
   //sz = PGROUNDUP(sz);
   if((allocuvm(pgdir, STACKTOP - PGSIZE, STACKTOP)) == 0)
     goto bad;
