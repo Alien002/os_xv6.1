@@ -86,7 +86,7 @@ trap(struct trapframe *tf)
               }
               
               myproc()->stack_sz++;
-              cprintf("PGFLT: pagees currently allocated: \n", myproc()->stack_sz);
+              cprintf("PGFLT: %d pagees currently allocated. \n", myproc()->stack_sz);
           }
           else{
               cprintf("PGFLT: ERROR, address is out of bounds. \n");
