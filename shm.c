@@ -13,7 +13,7 @@ struct {
     uint id;
     char *frame;
     int refcnt;
-      shm_get_page(int);
+      struct shm_get_page(int);
   } shm_pages[64];
 } shm_table;
 
@@ -29,8 +29,10 @@ void shminit() {
   release(&(shm_table.lock));
 }
 
-shm_page * shm_get_page(int id){
-    for(uint i = 0; i < 64; ++i){
+struct shm_page * shm_get_page(int id){
+    uint i;     //have to declare i outside of loop??
+    
+    for(i = 0; i < 64; ++i){
         if(shm_table.shm_pages[i].id == id){
             return shm_table.shm_pages + i;
         }
@@ -65,7 +67,7 @@ int shm_open(int id, char **pointer) {
         }
     }
     else{
-    
+        uint i;
         for(uint i = 0; i < 64; ++i){
             if(!shm_table.shm_pages[i].frame){
                 pg = shm_table.shm_pages + i;
