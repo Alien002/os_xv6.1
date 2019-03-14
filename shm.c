@@ -109,18 +109,19 @@ int shm_close(int id) {
     struct shm_page *pg = shm_get_page(id);
     
     if(pg == 0 || pg->refcnt == 0){
-        cprintf("Error: No shared memory to clsoe. \n");
+        cprintf("Error: No shared memory to close. \n");
         release(&(shm_table.lock));
         return -1;
     }
     else{
+        free(shm_pages[pg]);
         --(pg->refcnt);
     }
     if(pg->refcnt == 0){
         pg->id = 0;
         pg->frame = 0;
     }
-
+    
     
     release(&(shm_table.lock));
     return 0; //added to remove compiler warning -- you should decide what to return
