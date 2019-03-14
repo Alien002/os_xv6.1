@@ -49,7 +49,7 @@ int shm_open(int id, char **pointer) {
     struct shm_page *pg = 0;            //have to declare stuct??
     struct proc *currproc = myproc();
     
-    char *va = (char*)PGROUNDUP(curproc->sz);
+    char *va = (char*)PGROUNDUP(currproc->sz);
     
     acquire(&(shm_table.lock));
 
@@ -62,7 +62,7 @@ int shm_open(int id, char **pointer) {
             *pointer = va;
         }
         else{
-            printf("Error: Shared page with id %d could not be mapped. \n", id);
+            cprintf("Error: Shared page with id %d could not be mapped. \n", id);
             release(&(shm_table.lock));
             return -1;
         }
@@ -92,7 +92,7 @@ int shm_open(int id, char **pointer) {
             ++(pg->refcnt);
         }
         else{
-            printf("Error: Shared page with id %d could not be mapped. \n", id);
+            cprintf("Error: Shared page with id %d could not be mapped. \n", id);
             release(&(shm_table.lock));
             return -1;
         }
@@ -109,7 +109,7 @@ int shm_close(int id) {
     struct shm_page *pg = shm_get_page(id);
     
     if(pg == 0 || pg->refcnt == 0){
-        printf("Error: No shared memory to clsoe. \n");
+        cprintf("Error: No shared memory to clsoe. \n");
         release(&(shm_table.lock));
         return -1;
     }
