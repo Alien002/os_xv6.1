@@ -77,7 +77,7 @@ int shm_open(int id, char **pointer) {
         }
         
         if(!pg){
-            printf("Error: Shared memory table is full. \n");
+            cprintf("Error: Shared memory table is full. \n");
             release(&(shm_table.lock));
             return -1;
         }
