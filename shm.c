@@ -114,7 +114,7 @@ int shm_close(int id) {
         return -1;
     }
     else{
-        free(shm_pages[pg]);
+        //free(shm_pages[pg]);
         --(pg->refcnt);
     }
     if(pg->refcnt == 0){
