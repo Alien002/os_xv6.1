@@ -13,7 +13,7 @@ struct {
     uint id;
     char *frame;
     int refcnt;
-      struct shm_get_page(int);
+      //struct shm_get_page(int);
   } shm_pages[64];
 } shm_table;
 
