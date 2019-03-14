@@ -45,8 +45,8 @@ struct shm_page * shm_get_page(int id){
 int shm_open(int id, char **pointer) {
 
 //you write this
-    shm_page *pg = 0;
-    proc *currproc = myproc();
+    struct shm_page *pg = 0;            //have to declare stuct??
+    struct proc *currproc = myproc();
     
     char *va = (char*)PGROUNDUP(curproc->sz);
     
@@ -105,7 +105,7 @@ int shm_open(int id, char **pointer) {
 int shm_close(int id) {
 //you write this too!
     acquire(&(shm_table.lock));
-    shm_page *pg = shm_get_page(id);
+    struct shm_page *pg = shm_get_page(id);
     
     if(pg == 0 || pg->refcnt == 0){
         printf("Error: No shared memory to clsoe. \n");
