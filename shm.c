@@ -29,6 +29,7 @@ void shminit() {
   release(&(shm_table.lock));
 }
 
+//Gets shared mem page id
 struct shm_page * shm_get_page(int id){
     uint i;     //have to declare i outside of loop??
     
