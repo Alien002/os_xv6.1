@@ -69,7 +69,7 @@ int shm_open(int id, char **pointer) {
     }
     else{
         uint i;
-        for(uint i = 0; i < 64; ++i){
+        for(i = 0; i < 64; ++i){
             if(!shm_table.shm_pages[i].frame){
                 pg = shm_table.shm_pages + i;
                 break;
