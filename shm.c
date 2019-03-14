@@ -13,6 +13,7 @@ struct {
     uint id;
     char *frame;
     int refcnt;
+      shm_get_page(int);
   } shm_pages[64];
 } shm_table;
 
@@ -28,22 +29,96 @@ void shminit() {
   release(&(shm_table.lock));
 }
 
+shm_page * shm_get_page(int id){
+    for(uint i = 0; i < 64; ++i){
+        if(shm_table.shm_pages[i].id == id){
+            return shm_table.shm_pages + i;
+        }
+    }
+    return 0;
+}
+
+
+
 int shm_open(int id, char **pointer) {
 
 //you write this
+    shm_page *pg = 0;
+    proc *currproc = myproc();
+    
+    char *va = (char*)PGROUNDUP(curproc->sz);
+    
+    acquire(&(shm_table.lock));
 
+    pg = shm_get_page(id);
+    
+    if(pg != 0){
+        if(!mappages(currproc->pgdir, va, PGSIZE, V2P(pg -> frame), PTE_W | PTE_U)){
+            currproc -> sz = (uint)va + PGSIZE;
+            ++(pg->refcnt);
+            *pointer = va;
+        }
+        else{
+            printf("Error: Shared page with id %d could not be mapped. \n", id);
+            release(&(shm_table.lock));
+            return -1;
+        }
+    }
+    else{
+    
+        for(uint i = 0; i < 64; ++i){
+            if(!shm_table.shm_pages[i].frame){
+                pg = shm_table.shm_pages + i;
+                break;
+            }
+        }
+        
+        if(!pg){
+            printf("Error: Shared memory table is full. \n");
+            release(&(shm_table.lock));
+            return -1;
+        }
+    
+        pg->frame = kalloc();
+        memset(pg->frame, 0, PGSIZE);
+    
+        if(!mappages(currproc->pgdir, va, PGSIZE, V2P(pg -> frame), PTE_W | PTE_U)){
+            currproc->sz = (uint)va + PGSIZE;
+            *pointer = va;
+            pg->id = id;
+            ++(pg->refcnt);
+        }
+        else{
+            printf("Error: Shared page with id %d could not be mapped. \n", id);
+            release(&(shm_table.lock));
+            return -1;
+        }
 
-
-
-return 0; //added to remove compiler warning -- you should decide what to return
+    }
+    release(&(shm_table.lock));
+    return 0; //added to remove compiler warning -- you should decide what to return
 }
 
 
 int shm_close(int id) {
 //you write this too!
+    acquire(&(shm_table.lock));
+    shm_page *pg = shm_get_page(id);
+    
+    if(pg == 0 || pg->refcnt == 0){
+        printf("Error: No shared memory to clsoe. \n");
+        release(&(shm_table.lock));
+        return -1;
+    }
+    else{
+        --(pg->refcnt);
+    }
+    if(pg->refcnt == 0){
+        pg->id = 0;
+        pg->frame = 0;
+    }
 
-
-
-
-return 0; //added to remove compiler warning -- you should decide what to return
+    
+    release(&(shm_table.lock));
+    return 0; //added to remove compiler warning -- you should decide what to return
 }
